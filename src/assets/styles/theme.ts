@@ -5,15 +5,19 @@ export const theme = {
     black: '#000',
     white: '#FFF',
 
-    rose100:'#f7e1d7',
-    rose200:'#fae0e4',
-    rose300:'#F2C8C8',
-    rose400:'#edafb8',
+    rose100:'#F6EAEF',
+    rose200:'#f7e1d7',
+    rose300:'#fae0e4',
+    rose400:'#F2C8C8',
+    rose500:'#edafb8',
+    rose600:'#F9C5DB',
+    rose700:'#F5A1C6',
    
     green100: '#b0c4b1',
     green500: '#6b9080',
     green600: '#588157',
     green700: '#4a5759',
+    green800: '#ACCA9C',
     
    
   },
@@ -21,6 +25,7 @@ export const theme = {
     md: '1.125rem',
     lg: '1.25rem',
     xl: '1.5rem',
+    xll: '5rem',
     '2xl': '2rem',
   }
 };
