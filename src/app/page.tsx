@@ -1,11 +1,11 @@
-'use client'
-import { Main } from './styles'
-//import styles from './page.module.css'
+import React from 'react';
+import Home from './Home/page';
 
-export default function Home() {
+
+export default function App() {
   return (
-    <Main>
-      <h1>Agenda</h1>
-    </Main>
+   <>
+   <Home/>
+   </>
   )
 }
