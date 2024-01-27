@@ -55,3 +55,9 @@ export const Button = styled.button`
     background-color: ${theme.colors.green800};
   }
 `;
+
+export const FormError = styled.text`
+ font-size: 10px;
+  color: #f75a68;
+
+`;
