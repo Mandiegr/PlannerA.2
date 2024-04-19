@@ -1,97 +1,102 @@
 import React, { useState } from 'react';
-import { Bell, BoxArrowInLeft, Dash, Gear, Palette } from 'react-bootstrap-icons';
-import {Container, Icon, LeftContainer, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator, } from '../assets/styles/navbar'
+import { Bell, BoxArrowInLeft, Gear, Palette } from 'react-bootstrap-icons';
+import { Icon, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator } from '../assets/styles/navbar';
+import { auth } from '@/config/firebaseConfig';
+import { deleteUserAndEvents } from '../config/deleteUser';
 
+interface NavbarProps {
+  handleColorChange: (color: 'rose' | 'green' | 'blue') => void;
+  notifications: { id: number; text: string; time: string }[];
+}
 
-
-
-const  Navbar = ({ handleColorChange }: { handleColorChange: (color: 'rose' | 'green') => void }) => {
+const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showConfiguration, setShowConfiguration] = useState(false);
-  const [showTheme, setShowTheme] = useState(false); 
-  const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green'>('rose');
-
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      text: "Inicio das Aulas-Faculdade ",
-      time: "2 DAYS"
-    },
-    {
-      id: 2,
-      text: "trabalho de Banco de Dados ",
-      time: "4 DAYS"
-    },
-
-  ]);
+  const [showTheme, setShowTheme] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green' | 'blue'>('rose');
 
   const handleThemeClick = () => {
-    setShowTheme(!showTheme); 
-    setShowNotifications(false); 
- };
+    setShowTheme(!showTheme);
+    setShowNotifications(false);
+  };
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
-    setShowConfiguration(false); 
+    setShowConfiguration(false);
   };
 
-  const handleConfigurationClick = () => {
+  const handleConfigurationClick = async () => {
     setShowConfiguration(!showConfiguration);
-    setShowNotifications(false); 
+    setShowNotifications(false);
   };
 
-  const handleThemeChange = (theme: 'rose' | 'green' ) => {
+  const handleThemeChange = (theme: 'rose' | 'green' | 'blue') => {
     setSelectedTheme(theme);
     handleColorChange(theme);
   };
 
+  const handleDeleteAccount = async () => {
+    if (auth.currentUser) {
+      const confirmDelete = window.confirm("Tem certeza que deseja excluir sua conta?");
+      if (confirmDelete) {
+        try {
+          await deleteUserAndEvents(auth.currentUser.uid);
+
+          await auth.signOut();
+
+        } catch (error) {
+          console.error('Erro ao excluir conta:', error);
+        }
+      }
+    }
+  };
+
   return (
-    <Container>
-      <LeftContainer>
-        <Sidebar>
-          <MenuItem className="menu-item" onClick={handleThemeClick}>
-            <Icon><Palette /></Icon><h3>Theme</h3>
+    <Sidebar>
+      <MenuItem className="menu-item" onClick={handleThemeClick}>
+        <Icon><Palette /></Icon><h3>Theme</h3>
+      </MenuItem>
+      {showTheme && (
+        <>
+          <MenuItem className="menu-item" onClick={() => handleThemeChange('rose')}>
+            <ThemeIndicator color={selectedTheme === 'rose' ? 'pink' : 'transparent'} />
+            <h3>rose</h3>
           </MenuItem>
-          {showTheme && (
-            <>
-              <MenuItem className="menu-item" onClick={() => handleThemeChange('rose')}>
-              <ThemeIndicator color={selectedTheme === 'rose' ? 'pink' : 'transparent'} />
-                <h3>rose</h3>
-              </MenuItem>
-              <MenuItem className="menu-item" onClick={() => handleThemeChange('green')}>
-                <ThemeIndicator color={selectedTheme === 'green' ? 'green' : 'transparent'} />
-                <h3>green</h3>
-              </MenuItem>
-            </>
-          )}
-          <MenuItem className="menu-item" id="notifications" onClick={handleNotificationsClick}>
-            <Icon><Bell /><small className="notification-count">{notifications.length}</small></Icon><h3>Notifications</h3>
-            <NotificationsPopup show={showNotifications}>
-              {notifications.map(notification => (
-                <div key={notification.id}>
-                  <div className="notification-body">
-                    <b>{notification.text}</b>
-                    <small className="text-muted">{notification.time}</small>
-                  </div>
-                </div>
-              ))}
-            </NotificationsPopup>
+          <MenuItem className="menu-item" onClick={() => handleThemeChange('green')}>
+            <ThemeIndicator color={selectedTheme === 'green' ? 'green' : 'transparent'} />
+            <h3>green</h3>
           </MenuItem>
-          <MenuItem className="menu-item" onClick={handleConfigurationClick}>
-            <Icon><Gear /></Icon><h3>Configuration</h3>
+          <MenuItem className="menu-item" onClick={() => handleThemeChange('blue')}>
+            <ThemeIndicator color={selectedTheme === 'blue' ? 'purple' : 'transparent'} />
+            <h3>blue</h3>
           </MenuItem>
-          {showConfiguration && (
-            <>
-              <MenuItem className="menu-item">
-                <Icon><BoxArrowInLeft /></Icon><h3>Sair</h3>
-              </MenuItem>
-            </>
-          )}
-        </Sidebar>
-      </LeftContainer>
-    </Container>
+        </>
+      )}
+      <MenuItem className="menu-item" id="notifications" onClick={handleNotificationsClick}>
+        <Icon><Bell /><small className="notification-count">{notifications.length}</small></Icon><h3>Notifications</h3>
+        <NotificationsPopup show={showNotifications}>
+          {notifications.map(notification => (
+            <div key={notification.id}>
+              <div className="notification-body">
+                <b>{notification.text}</b>
+                <small className="text-muted">{notification.time}</small>
+              </div>
+            </div>
+          ))}
+        </NotificationsPopup>
+      </MenuItem>
+      <MenuItem className="menu-item" onClick={handleConfigurationClick}>
+        <Icon><Gear /></Icon><h3>Configuration</h3>
+      </MenuItem>
+      {showConfiguration && (
+        <>
+          <MenuItem className="menu-item" onClick={handleDeleteAccount}>
+            <Icon><BoxArrowInLeft /></Icon><h3>Excluir Conta</h3>
+          </MenuItem>
+        </>
+      )}
+    </Sidebar>
   );
 };
 
 export default Navbar;
-
