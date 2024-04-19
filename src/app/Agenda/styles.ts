@@ -9,20 +9,18 @@ const ColorSwitcher = styled.div`
   }
 `;
 
-interface StyledGridContainerProps {
+interface ContainerProps {
   color: 'rose' | 'green' | 'blue';
 }
 
-export const StyledGridContainer = styled.div<StyledGridContainerProps>`
-  display: grid;
-  grid-template-areas:
-    'header header header header header header'
-    'menu main main main main main';
-  margin-top: 10px;
-  gap: 10px;
-  padding: 8px;
-  padding-right: 20px;
-  background-color: ${(props) => {
+export const Container = styled.div<ContainerProps>`
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100svw;
+height: 100svh;
+
+background-color: ${(props) => {
     switch (props.color) {
       case 'rose':
         return '#F2C8C8';
@@ -33,7 +31,23 @@ export const StyledGridContainer = styled.div<StyledGridContainerProps>`
       default:
         return '#F2C8C8';
     }
+    
   }};
+
+`
+
+export const StyledGridContainer = styled.div`
+  display: grid;
+  grid-template-areas:
+    'header header header header header header'
+    'menu main main main main main';
+  margin-top: 10px;
+  gap: 10px;
+  padding: 8px;
+  padding-right: 20px;
+
+  width: 100rem;
+
 
   @media (min-width: 340px) and (max-width: 540px) {
   }

@@ -118,7 +118,7 @@ const MyCalendar: React.FC = () => {
 
   return (
     <div>
-      <NotificationToast events={data} />
+      {/*<NotificationToast events={data} />*/}
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -129,7 +129,7 @@ const MyCalendar: React.FC = () => {
           right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
         aspectRatio={1.8}
-        height="800px"
+        height="500px"
         selectable={true}
         select={handleDateSelect}
         eventClick={handleEventClick}
