@@ -13,10 +13,8 @@ const ProfilePage = () => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         setUser(authUser);
-        // Acessar o ID do usuário aqui:
         const userId = authUser.uid;
         console.log("ID do usuário logado:", userId);
-        // Você pode utilizar o userId para outras ações na sua aplicação
       } else {
         router.push('/Home');
       }
@@ -26,7 +24,7 @@ const ProfilePage = () => {
   }, [router]);
 
   if (!user) {
-    return null; // Retornar null ou algo apropriado para usuários não autenticados
+    return null;
   }
 
   return (
