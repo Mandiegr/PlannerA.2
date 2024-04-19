@@ -3,11 +3,12 @@ import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../config/firebaseConfig';
 import { useRouter } from 'next/navigation';
 import { Button } from '../styles';
+import { Google } from 'react-bootstrap-icons';
 
-const SingIn = () => {
+const RegisterGoogle = () => {
   const router = useRouter();
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleRegister = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
@@ -19,10 +20,16 @@ const SingIn = () => {
   };
 
   return (
-    <div>
-      <Button onClick={handleGoogleLogin}>Sing In Google</Button>
+  <>
+  <div>
+     
+      <Button onClick={handleGoogleRegister}>   Sign in with Google <Google/> </Button>
     </div>
+  </>
+    
+
+    
   );
 };
 
-export default SingIn;
+export default RegisterGoogle;

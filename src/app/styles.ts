@@ -1,4 +1,4 @@
-import { theme } from '@/assets/styles/theme';
+import { theme } from '@/assets/themes/theme';
 import styled from 'styled-components';
 
 export const Main = styled.div`
@@ -9,13 +9,13 @@ justify-content: center;
 align-items: center;
 padding: 6rem;
 min-height: 100vh;
-background-color: ${theme.colors.rose100};
+background-color: ${theme.colors.rose400};
 `;
 
-export const Text = styled.div`
+export const Text = styled.text`
   font-size: ${theme.fontSizes.xll};
   font-family: 'Times New Roman', Times, serif;
-  color: ${theme.colors.rose600};
+  color: ${theme.colors.green800};
   text-align: center; 
   margin-bottom: 50px;
 `;
@@ -29,25 +29,26 @@ export const Square = styled.div`
   width: 500px; 
   height: 500px; 
   background-color:  ${theme.colors.white};
-  box-shadow: 30px 40px ${theme.colors.rose600};
+  box-shadow: 30px 40px ${theme.colors.green800};
     
   
 `;
 
-export const Button = styled.div`
+export const Button = styled.button`
 
-  background-color:${theme.colors.rose600};
+  background-color:${theme.colors.green800};
   color: white;
-  padding: 10px;
+  padding: 5px;
   border: none;
-  border-radius: 15px;
-  width: 35%; 
+  //width: 50%; 
   text-align: center; 
   font-weight: bold;
+  font-size: ${theme.fontSizes.p};
   cursor: pointer;
 
   &:hover {
-    background-color: ${theme.colors.green800};
+    background-color: ${theme.colors.rose400};
+    color: ${theme.colors.green800}
   }
   
 `;

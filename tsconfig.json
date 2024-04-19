@@ -40,7 +40,7 @@
     "/api/*",
     "api.ts",
     "api.tsx"
-  ],
+, "../files/register/TextBlock.tsx", "../files/ToDoList.tsx", "../files/axios.ts", "../deenvolvimento/styles.ts"  ],
   "exclude": [
     "node_modules"
   ]
