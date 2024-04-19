@@ -20,14 +20,11 @@ const RegisterGoogle = () => {
   };
 
   return (
-  <>
-  <div>
-     
+    <>
+     <div>
       <Button onClick={handleGoogleRegister}>   Sign in with Google <Google/> </Button>
     </div>
-  </>
-    
-
+   </>
     
   );
 };
