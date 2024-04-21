@@ -9,13 +9,14 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
 import { auth, firebaseConfig } from '@/config/firebaseConfig';
 import { useQuery } from 'react-query';
-import NotificationToast from '../components/notification';
 
 import moment from 'moment';
 
+interface MyCalendarProps {
+  handleEventNotification: (eventNotification: any) => void;
+}
 
-
-const MyCalendar: React.FC = () => {
+const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState<EventInput[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -43,11 +44,10 @@ const MyCalendar: React.FC = () => {
     buscarEventos();
   }, [auth.currentUser, db]);
 
-  // UseQuery para verificar eventos próximos
   const { isLoading, error, data } = useQuery('events', async () => {
     const eventosProximos = events.filter(event => {
       const timeToEventStart = moment(event.start).diff(moment(), 'minutes');
-      return timeToEventStart <= 60; // Evento começa em menos de uma hora
+      return timeToEventStart <= 60; //
     });
     return eventosProximos;
   });
@@ -64,7 +64,6 @@ const MyCalendar: React.FC = () => {
   const handleEventClick = async (info: EventClickArg) => {
     if (window.confirm(`Deseja excluir o evento '${info.event.title}'?`)) {
       const eventId = info.event.id;
-      // Remove o evento da coleção no Firestore
       try {
         await deleteDoc(doc(db, 'eventos', eventId));
       } catch (error) {
@@ -72,7 +71,6 @@ const MyCalendar: React.FC = () => {
         alert('Erro ao excluir evento. Tente novamente.');
         return;
       }
-      // Remove o evento da lista de eventos na UI
       setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
       if (calendarRef.current) {
         const calendarApi = calendarRef.current.getApi();
@@ -107,6 +105,7 @@ const MyCalendar: React.FC = () => {
           calendarRef.current.getApi().addEvent(newEvent);
         }
         setShowForm(false);
+        handleEventNotification(newEvent);
       } catch (error) {
         console.error('Erro ao salvar evento:', error);
         alert('Erro ao salvar evento. Tente novamente.');
@@ -118,7 +117,6 @@ const MyCalendar: React.FC = () => {
 
   return (
     <div>
-      {/*<NotificationToast events={data} />*/}
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

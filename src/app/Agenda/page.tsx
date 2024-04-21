@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MyCalendar from '@/components/calendario';
 import Navbar from '@/components/navbar';
 import ProfilePage from '../profile/page';
-import { Main, Menu, StyledGridContainer } from './styles'
+import { Container, Main, Menu, StyledGridContainer } from './styles'
 import { User } from 'firebase/auth';
 import {QueryClient,  QueryClientProvider } from 'react-query';
 
@@ -16,27 +16,35 @@ export default function Agenda({ user }: AgendaProps) {
   const [color, setColor] = useState<'rose' | 'green' | 'blue'>('rose');
   const [events, setEvents] = useState([]);
 
+  const [notifications, setNotifications] = useState<any[]>([]);
+
   const handleColorChange = (newColor: 'rose' | 'green' | 'blue') => {
     setColor(newColor);
   };
 
+  const handleEventNotification = (eventNotification: any) => {
+    setNotifications(prevNotifications => [...prevNotifications, eventNotification]);
+  };
+
   return (
-    <>
-      <StyledGridContainer color={color}>
+    <Container color={color}>
+      <StyledGridContainer>
         <Menu>
           <ProfilePage />
-          <Navbar handleColorChange={handleColorChange} notifications={[]} />
+          <Navbar handleColorChange={handleColorChange} notifications={notifications} />
+
         </Menu>
 
         <Main>
    
         <QueryClientProvider client={queryClient}>
-        <MyCalendar />
+        <MyCalendar handleEventNotification={handleEventNotification} />
         </QueryClientProvider>
         
-        </Main>
+      </Main> 
+        
       </StyledGridContainer>
-    </>
+      </Container>
   );
 }
 

@@ -3,10 +3,11 @@ import { Bell, BoxArrowInLeft, Gear, Palette } from 'react-bootstrap-icons';
 import { Icon, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator } from '../assets/styles/navbar';
 import { auth } from '@/config/firebaseConfig';
 import { deleteUserAndEvents } from '../config/deleteUser';
+import NotificationToast from './notification';
 
 interface NavbarProps {
   handleColorChange: (color: 'rose' | 'green' | 'blue') => void;
-  notifications: { id: number; text: string; time: string }[];
+  notifications: any[];
 }
 
 const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => {
@@ -15,14 +16,23 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
   const [showTheme, setShowTheme] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green' | 'blue'>('rose');
 
-  const handleThemeClick = () => {
-    setShowTheme(!showTheme);
-    setShowNotifications(false);
-  };
+  
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
     setShowConfiguration(false);
+    setShowNotificationToast(true);
+  };
+  
+
+  const handleNotificationToastClose = () => {
+    setShowNotificationToast(false);
+  };
+  
+  const handleThemeClick = () => {
+    setShowTheme(!showTheme);
+    setShowNotifications(false);
   };
 
   const handleConfigurationClick = async () => {
@@ -73,18 +83,21 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
         </>
       )}
       <MenuItem className="menu-item" id="notifications" onClick={handleNotificationsClick}>
-        <Icon><Bell /><small className="notification-count">{notifications.length}</small></Icon><h3>Notifications</h3>
+        <Icon><Bell /><small className="notification-count">{notifications ? notifications.length : 0}</small></Icon><h3>Notifications</h3>
         <NotificationsPopup show={showNotifications}>
-          {notifications.map(notification => (
+          {notifications && notifications.map(notification => (
             <div key={notification.id}>
               <div className="notification-body">
+            
                 <b>{notification.text}</b>
                 <small className="text-muted">{notification.time}</small>
               </div>
+              {showNotificationToast && <NotificationToast events={[notification]} onClose={handleNotificationToastClose} />}
             </div>
           ))}
         </NotificationsPopup>
       </MenuItem>
+      
       <MenuItem className="menu-item" onClick={handleConfigurationClick}>
         <Icon><Gear /></Icon><h3>Configuration</h3>
       </MenuItem>
