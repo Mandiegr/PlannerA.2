@@ -4,9 +4,10 @@ import { EventInput } from '@fullcalendar/core';
 interface NotificationToastProps {
   events?: EventInput[]; 
   onClose: () => void;
+  message?: string; 
 }
 
-const NotificationToast: React.FC<NotificationToastProps> = ({ events }) => {
+const NotificationToast: React.FC<NotificationToastProps> = ({ events, message }) => {
 
   if (events && events.length > 0) {
     return (
@@ -19,7 +20,11 @@ const NotificationToast: React.FC<NotificationToastProps> = ({ events }) => {
       </div>
     );
   } else {
-    return null; 
+    return (
+      <div>
+        <p>{message || 'Não há eventos próximos'}</p>
+      </div>
+    );
   }
 };
 

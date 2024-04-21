@@ -15,8 +15,6 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
   const [showConfiguration, setShowConfiguration] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green' | 'blue'>('rose');
-
-  
   const [showNotificationToast, setShowNotificationToast] = useState(false);
 
   const handleNotificationsClick = () => {
@@ -24,12 +22,11 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
     setShowConfiguration(false);
     setShowNotificationToast(true);
   };
-  
 
   const handleNotificationToastClose = () => {
     setShowNotificationToast(false);
   };
-  
+
   const handleThemeClick = () => {
     setShowTheme(!showTheme);
     setShowNotifications(false);
@@ -51,9 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
       if (confirmDelete) {
         try {
           await deleteUserAndEvents(auth.currentUser.uid);
-
           await auth.signOut();
-
         } catch (error) {
           console.error('Erro ao excluir conta:', error);
         }
@@ -88,16 +83,19 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
           {notifications && notifications.map(notification => (
             <div key={notification.id}>
               <div className="notification-body">
-            
                 <b>{notification.text}</b>
                 <small className="text-muted">{notification.time}</small>
               </div>
-              {showNotificationToast && <NotificationToast events={[notification]} onClose={handleNotificationToastClose} />}
+              {showNotificationToast && 
+                <NotificationToast events={[notification]} onClose={handleNotificationToastClose} message="Não há eventos proximos" />
+              }
             </div>
           ))}
+          {!notifications || notifications.length === 0 && showNotificationToast && 
+            <NotificationToast message="Não há eventos próximos" onClose={handleNotificationToastClose} />
+          }
         </NotificationsPopup>
       </MenuItem>
-      
       <MenuItem className="menu-item" onClick={handleConfigurationClick}>
         <Icon><Gear /></Icon><h3>Configuration</h3>
       </MenuItem>
