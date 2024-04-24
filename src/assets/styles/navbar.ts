@@ -15,8 +15,9 @@ export const Icon = styled.span`
   padding: 0.5rem;
   font-size: 1.5rem;
 
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     padding: 0.9rem;
+    font-size: 1.2rem;
     
   }
 `;
@@ -39,7 +40,9 @@ export const MenuItem = styled.a`
   @media screen and (max-width: 700px) {
     h3 {
       display: none;
+
     }
+
   }
 `;
 
@@ -48,7 +51,7 @@ export const NotificationsPopup = styled.div<{ show: boolean }>`
   top: 0;
   left: 105%;
   width: 20rem;
-  background: #F6EAEF;
+  background: #fae0e4;
   color: #003049;
   border-radius: var(--card-border-radius);
   padding: 0.8rem;
@@ -67,8 +70,9 @@ export const ThemeIndicator = styled.div<{ color: string }>`
 
   
 
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
    margin-left: 1rem;
+   margin-top: 0.5rem;
     
   }
 `;

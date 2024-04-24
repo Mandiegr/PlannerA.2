@@ -1,12 +1,20 @@
 import { theme } from '@/assets/themes/theme';
 import styled from 'styled-components';
 
+export const CallendarContainer = styled.div`
+
+`;
+
+
+export const ToolbarItem = styled.span`
+  font-size: 12px;
+`;
+
 export const Model = styled.div`
 display: flex;
 flex-direction: column;
 width: 300px;
-//justify-content: space-between;
-justify-content: center;
+justify-content: space-between;
 align-items: center;
 position: absolute;
 bottom: 10rem;
@@ -21,23 +29,21 @@ input {
 }
 `;
 
-
-
 export const Button = styled.button`
-
-  background-color:${theme.colors.rose100};
+  background-color: ${theme.colors.rose100};
   color: white;
   padding: 0.4rem;
   margin-top: 0.5rem;
+  margin-right: 0.5rem;
   border: none;
   color: ${theme.colors.green800};
-  text-align: center; 
+  text-align: center;
   font-weight: bold;
-  //font-size: ${theme.fontSizes.p};
   font-size: 12px;
   cursor: pointer;
-  
 `;
+
+
 
 
 
