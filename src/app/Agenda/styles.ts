@@ -10,7 +10,7 @@ const ColorSwitcher = styled.div`
 `;
 
 interface ContainerProps {
-  color: 'rose' | 'green' | 'blue';
+  color: 'rose' | 'green' | 'purple';
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -26,7 +26,7 @@ background-color: ${(props) => {
         return '#F2C8C8';
       case 'green':
         return '#b0c4b1';
-      case 'blue':
+      case 'purple':
         return '#cdb4db';
       default:
         return '#F2C8C8';

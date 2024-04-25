@@ -19,7 +19,7 @@ export const theme = {
     green500: '#6b9080',
     green600: '#588157',
     green700: '#4a5759',
-    green800: '#1b263b', //#ACCA9C' #03045e
+    green800: '#1b263b',
     
    
   },

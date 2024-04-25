@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Bell, BoxArrowInLeft, Gear, Palette, RecordFill, Heart, BellFill } from 'react-bootstrap-icons'; // Importe o ícone Heart
+import { Bell, BoxArrowInLeft, Gear, Palette, BellFill } from 'react-bootstrap-icons';
 import { Icon, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator } from '../assets/styles/navbar';
 import { auth } from '@/config/firebaseConfig';
 import { deleteUserAndEvents } from '../config/deleteUser';
 import NotificationToast from './notification';
 
 interface NavbarProps {
-  handleColorChange: (color: 'rose' | 'green' | 'blue') => void;
+  handleColorChange: (color: 'rose' | 'green' | 'purple') => void;
   notifications: any[];
 }
 
@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showConfiguration, setShowConfiguration] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green' | 'blue'>('rose');
+  const [selectedTheme, setSelectedTheme] = useState<'rose' | 'green' | 'purple'>('rose');
   const [showNotificationToast, setShowNotificationToast] = useState(false);
 
   const handleNotificationsClick = () => {
@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
     setShowNotifications(false);
   };
 
-  const handleThemeChange = (theme: 'rose' | 'green' | 'blue') => {
+  const handleThemeChange = (theme: 'rose' | 'green' | 'purple') => {
     setSelectedTheme(theme);
     handleColorChange(theme);
   };
@@ -71,9 +71,9 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
             <ThemeIndicator color={selectedTheme === 'green' ? 'green' : 'transparent'} />
             <h3>green</h3>
           </MenuItem>
-          <MenuItem className="menu-item" onClick={() => handleThemeChange('blue')}>
-            <ThemeIndicator color={selectedTheme === 'blue' ? 'purple' : 'transparent'} />
-            <h3>blue</h3>
+          <MenuItem className="menu-item" onClick={() => handleThemeChange('purple')}>
+            <ThemeIndicator color={selectedTheme === 'purple' ? 'purple' : 'transparent'} />
+            <h3>purple</h3>
           </MenuItem>
         </>
       )}

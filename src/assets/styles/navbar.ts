@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../themes/theme";
 
 export const Container = styled.div``;
 
@@ -33,7 +34,7 @@ export const MenuItem = styled.a`
   color: #003049;
 
   &:hover {
-    background: #fae0e4;
+    background: ${theme.colors.rose300};
     color: #396177;
   }
 
@@ -51,7 +52,7 @@ export const NotificationsPopup = styled.div<{ show: boolean }>`
   top: 0;
   left: 105%;
   width: 20rem;
-  background: #fae0e4;
+  background: ${theme.colors.rose300};
   color: #003049;
   border-radius: var(--card-border-radius);
   padding: 0.8rem;
@@ -61,7 +62,7 @@ export const NotificationsPopup = styled.div<{ show: boolean }>`
 
 `;
 export const ThemeIndicator = styled.div<{ color: string }>`
-  width: 12px;
+  width: 12px; 
   height: 12px;
   border-radius: 50%;
   margin-left: 0.6rem;
