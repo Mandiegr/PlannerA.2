@@ -71,8 +71,11 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
   };
 
   const handleEventUpdate = async (updatedEvent: EventApi) => {
-    console.log('Evento atualizado:', updatedEvent);
+    if (updatedEvent.extendedProps.edited === false) {
+      handleEventNotification(updatedEvent.toPlainObject());
+    }
   };
+  
 
   const handleSubmit = async () => {
     const { title, start, end } = formData;
@@ -85,6 +88,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
         allDay: false,
         createdAt: serverTimestamp(),
         ownerId: userId,
+        edited: false, 
       };
       try {
         const eventosRef = collection(db, 'eventos');
@@ -112,6 +116,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
         start: new Date(start).toISOString(), 
         end: new Date(end).toISOString(),
         ownerId: userId,
+         edited: true,
       };
       try {
         await updateDoc(doc(db, 'eventos', selectedEvent.id), updatedEvent);
@@ -122,7 +127,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
           return updatedEvents;
         });
         setShowEditForm(false);
-        handleEventNotification(updatedEvent);
+        //handleEventNotification(updatedEvent);
       } catch (error) {
         console.error('Erro ao atualizar evento:', error);
         alert('Erro ao atualizar evento. Tente novamente.');
