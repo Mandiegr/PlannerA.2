@@ -2,13 +2,11 @@ import { theme } from '@/assets/themes/theme';
 import styled from 'styled-components';
 
 export const CallendarContainer = styled.div`
-
+  @media (max-width: 700px) {
+    font-size: 0.7rem;
+  }
 `;
 
-
-export const ToolbarItem = styled.span`
-  font-size: 12px;
-`;
 
 export const Model = styled.div`
 display: flex;
@@ -42,8 +40,3 @@ export const Button = styled.button`
   font-size: 12px;
   cursor: pointer;
 `;
-
-
-
-
-
