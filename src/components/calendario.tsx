@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { auth, firebaseConfig } from '@/config/firebaseConfig';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { DateSelectArg, EventClickArg, EventApi, EventInput, EventChangeArg } from '@fullcalendar/core';
-import { Button, Model } from './styles-callendar';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
-import { auth, firebaseConfig } from '@/config/firebaseConfig';
+import { Button, CallendarContainer, Model } from './styles-callendar';
 import { useQuery } from 'react-query';
-
 import moment from 'moment';
 
 interface MyCalendarProps {
@@ -20,7 +19,9 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState<EventInput[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({ title: '', start: '', end: '' });
+  const [selectedEvent, setSelectedEvent] = useState<EventInput | null>(null);
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -46,11 +47,14 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
 
   const { isLoading, error, data } = useQuery('events', async () => {
     const eventosProximos = events.filter(event => {
-      const timeToEventStart = moment(event.start).diff(moment(), 'minutes');
-      return timeToEventStart <= 60; //
+      const eventStartDate = moment(event.start);
+      const daysUntilEventStart = eventStartDate.diff(moment(), 'days');
+      return daysUntilEventStart >= 0 && daysUntilEventStart <= 7;
     });
     return eventosProximos;
   });
+  
+  
 
   const handleDateSelect = (arg: DateSelectArg) => {
     setFormData({
@@ -61,28 +65,12 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     setShowForm(true);
   };
 
-  const handleEventClick = async (info: EventClickArg) => {
-    if (window.confirm(`Deseja excluir o evento '${info.event.title}'?`)) {
-      const eventId = info.event.id;
-      try {
-        await deleteDoc(doc(db, 'eventos', eventId));
-      } catch (error) {
-        console.error('Erro ao excluir evento no Firestore:', error);
-        alert('Erro ao excluir evento. Tente novamente.');
-        return;
-      }
-      setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
-      if (calendarRef.current) {
-        const calendarApi = calendarRef.current.getApi();
-        const eventToRemove = calendarApi.getEventById(eventId);
-        if (eventToRemove) {
-          eventToRemove.remove();
-        }
-      }
-    }
+  const handleEventClick = (info: EventClickArg) => {
+    setSelectedEvent(info.event.toPlainObject());
+    setShowEditForm(true);
   };
 
-  const handleEventUpdate = (updatedEvent: EventApi) => {
+  const handleEventUpdate = async (updatedEvent: EventApi) => {
     console.log('Evento atualizado:', updatedEvent);
   };
 
@@ -92,20 +80,19 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       const userId = auth.currentUser ? auth.currentUser.uid : null;
       const newEvent = {
         title,
-        start: moment(start).format('YYYY-MM-DDTHH:mm:ss'),
-        end: moment(end).format('YYYY-MM-DDTHH:mm:ss'),
+        start: new Date(start).toISOString(),
+        end: new Date(end).toISOString(), 
         allDay: false,
         createdAt: serverTimestamp(),
         ownerId: userId,
       };
       try {
         const eventosRef = collection(db, 'eventos');
-        await addDoc(eventosRef, newEvent);
-        if (calendarRef.current) {
-          calendarRef.current.getApi().addEvent(newEvent);
-        }
+        const docRef = await addDoc(eventosRef, newEvent);
+        const addedEvent = { ...newEvent, id: docRef.id }; 
+        setEvents(prevEvents => [...prevEvents, addedEvent]); 
         setShowForm(false);
-        handleEventNotification(newEvent);
+        handleEventNotification(addedEvent);
       } catch (error) {
         console.error('Erro ao salvar evento:', error);
         alert('Erro ao salvar evento. Tente novamente.');
@@ -114,9 +101,66 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       alert('Por favor, preencha todos os campos do formulário.');
     }
   };
+  
+  const handleEditSubmit = async () => {
+    const { title, start, end } = formData;
+    if (title && start && end && selectedEvent && selectedEvent.id) {
+      const userId = auth.currentUser ? auth.currentUser.uid : null;
+      const updatedEvent = {
+        ...selectedEvent,
+        title,
+        start: new Date(start).toISOString(), 
+        end: new Date(end).toISOString(),
+        ownerId: userId,
+      };
+      try {
+        await updateDoc(doc(db, 'eventos', selectedEvent.id), updatedEvent);
+        setEvents(prevEvents => {
+          const updatedEvents = prevEvents.map(event =>
+            event.id === selectedEvent.id ? updatedEvent : event
+          );
+          return updatedEvents;
+        });
+        setShowEditForm(false);
+        handleEventNotification(updatedEvent);
+      } catch (error) {
+        console.error('Erro ao atualizar evento:', error);
+        alert('Erro ao atualizar evento. Tente novamente.');
+      }
+    } else {
+      alert('Por favor, preencha todos os campos do formulário.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedEvent && selectedEvent.id) {
+      if (window.confirm(`Deseja excluir o evento '${selectedEvent.title}'?`)) {
+        try {
+          await deleteDoc(doc(db, 'eventos', selectedEvent.id));
+          setEvents(prevEvents => prevEvents.filter(event => event.id !== selectedEvent.id));
+          if (calendarRef.current) {
+            const calendarApi = calendarRef.current.getApi();
+            const eventToRemove = calendarApi.getEventById(selectedEvent.id);
+            if (eventToRemove) {
+              eventToRemove.remove();
+            }
+          }
+          setShowEditForm(false);
+          handleEventNotification(null);
+        } catch (error) {
+          console.error('Erro ao excluir evento:', error);
+          alert('Erro ao excluir evento. Tente novamente.');
+        }
+      }
+    } else {
+      console.error('ID do evento não está disponível');
+    }
+  };
+  
+  
 
   return (
-    <div>
+    <CallendarContainer>
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -155,7 +199,33 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
           <Button onClick={handleSubmit}>Criar Evento</Button>
         </Model>
       )}
-    </div>
+      {showEditForm && (
+        <Model>
+          <input
+            type="text"
+            placeholder="Digite o título do evento"
+            value={formData.title}
+            onChange={e => setFormData({ ...formData, title: e.target.value })}
+          />
+          <input
+            type="datetime-local"
+            value={formData.start}
+            onChange={e => setFormData({ ...formData, start: e.target.value })}
+          />
+          <input
+            type="datetime-local"
+            value={formData.end}
+            onChange={e => setFormData({ ...formData, end: e.target.value })}
+          />
+          <div>
+            <Button onClick={handleDelete}>Excluir Evento</Button>
+            <Button onClick={handleEditSubmit}>Editar Evento</Button>
+          </div>
+          
+
+        </Model>
+      )}
+    </CallendarContainer>
   );
 };
 
