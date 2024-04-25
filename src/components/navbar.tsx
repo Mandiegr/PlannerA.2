@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, BoxArrowInLeft, Gear, Palette } from 'react-bootstrap-icons';
+import { Bell, BoxArrowInLeft, Gear, Palette, RecordFill, Heart, BellFill } from 'react-bootstrap-icons'; // Importe o ícone Heart
 import { Icon, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator } from '../assets/styles/navbar';
 import { auth } from '@/config/firebaseConfig';
 import { deleteUserAndEvents } from '../config/deleteUser';
@@ -78,22 +78,28 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
         </>
       )}
       <MenuItem className="menu-item" id="notifications" onClick={handleNotificationsClick}>
-        <Icon><Bell /><small className="notification-count">{notifications ? notifications.length : 0}</small></Icon><h3>Notifications</h3>
+        <div>
+          {notifications && notifications.length > 0 ? <Icon><BellFill /></Icon> : <Icon><Bell /></Icon>} 
+        </div>
+        <h3>Notifications</h3>
         <NotificationsPopup show={showNotifications}>
           {notifications && notifications.map(notification => (
-            <div key={notification.id}>
-              <div className="notification-body">
-                <b>{notification.text}</b>
-                <small className="text-muted">{notification.time}</small>
+            notification && (
+              <div key={notification.id}>
+                <div className="notification-body">
+                  <b>{notification.text}</b>
+                  <small className="text-muted">{notification.time}</small>
+                </div>
+                {showNotificationToast && 
+                  <NotificationToast events={[notification]} onClose={handleNotificationToastClose} />
+                }
               </div>
-              {showNotificationToast && 
-                <NotificationToast events={[notification]} onClose={handleNotificationToastClose} message="Não há eventos proximos" />
-              }
-            </div>
+            )
           ))}
-          {!notifications || notifications.length === 0 && showNotificationToast && 
+
+          {(!notifications || notifications.length === 0) && showNotificationToast && (
             <NotificationToast message="Não há eventos próximos" onClose={handleNotificationToastClose} />
-          }
+          )}
         </NotificationsPopup>
       </MenuItem>
       <MenuItem className="menu-item" onClick={handleConfigurationClick}>
