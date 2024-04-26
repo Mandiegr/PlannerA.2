@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const Main = styled.div`
 display: flex;
 flex-direction: column;
-//justify-content: space-between;
+//justify-content: space-between; 
 justify-content: center;
 align-items: center;
 padding: 6rem;
@@ -18,6 +18,13 @@ export const Text = styled.text`
   color: ${theme.colors.green800};
   text-align: center; 
   margin-bottom: 50px;
+
+
+  @media screen and (max-width: 700px) {
+    h3 {
+     font-size: 5rem;
+    }
+  }
 `;
 
 export const Square = styled.div`
@@ -30,6 +37,12 @@ export const Square = styled.div`
   height: 500px; 
   background-color:  ${theme.colors.white};
   box-shadow: 30px 40px ${theme.colors.green800};
+
+  @media screen and (max-width: 700px) {
+   width: 300px;
+   height: 300px;
+
+  }
     
   
 `;
@@ -38,7 +51,7 @@ export const Button = styled.button`
 
   background-color:${theme.colors.green800};
   color: white;
-  padding: 5px;
+  padding: 0.8rem;
   border: none;
   //width: 50%; 
   text-align: center; 
