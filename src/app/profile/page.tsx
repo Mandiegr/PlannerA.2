@@ -32,8 +32,8 @@ const ProfilePage = () => {
       <Image
         src={user.photoURL || '/default-photo.jpg'}
         alt="Foto do Usuário"
-        width={60}
-        height={60}
+        width={55}
+        height={55}
         style={{ borderRadius: "50%" }}
       />
       <p>{user.displayName}</p>

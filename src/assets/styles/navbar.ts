@@ -19,7 +19,6 @@ export const Icon = styled.span`
   @media (max-width: 700px) {
     padding: 0.9rem;
     font-size: 1.2rem;
-    
   }
 `;
 
@@ -68,7 +67,7 @@ export const ThemeIndicator = styled.div<{ color: string }>`
   margin-left: 0.6rem;
   margin-right: 1rem;
   background-color: ${({ color }) => color};
-
+  border: 2px solid ${({ color }) => color !== 'transparent' ? color : '#1b263b'};
   
 
   @media (max-width: 700px) {

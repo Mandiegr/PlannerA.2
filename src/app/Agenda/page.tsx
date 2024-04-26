@@ -13,12 +13,12 @@ interface AgendaProps {
 }
 
 export default function Agenda({ user }: AgendaProps) {
-  const [color, setColor] = useState<'rose' | 'green' | 'blue'>('rose');
+  const [color, setColor] = useState<'rose' | 'green' | 'purple'>('rose');
   const [events, setEvents] = useState([]);
 
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  const handleColorChange = (newColor: 'rose' | 'green' | 'blue') => {
+  const handleColorChange = (newColor: 'rose' | 'green' | 'purple') => {
     setColor(newColor);
   };
 
