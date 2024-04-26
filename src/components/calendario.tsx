@@ -226,8 +226,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
             <Button onClick={handleDelete}>Excluir Evento</Button>
             <Button onClick={handleEditSubmit}>Editar Evento</Button>
           </div>
-          
-
+        
         </Model>
       )}
     </CallendarContainer>
