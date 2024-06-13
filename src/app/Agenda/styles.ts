@@ -74,6 +74,13 @@ export const GridItem = styled.div`
 
 export const Menu = styled(GridItem)`
   grid-area: menu;
+
+    @media screen and (max-width: 700px) {
+
+      display: none;
+
+    
+  }
 `;
 
 export const Main = styled(GridItem)`

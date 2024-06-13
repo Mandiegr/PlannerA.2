@@ -7,6 +7,7 @@ import ProfilePage from '../profile/page';
 import { Container, Main, Menu, StyledGridContainer } from './styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useUser } from '@/context/UserContext';
+import MenuHamburger from '@/components/button';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const Agenda: React.FC = () => {
           </QueryClientProvider>
         </Main>
       </StyledGridContainer>
+      <MenuHamburger/>
     </Container>
   );
 };

@@ -33,13 +33,13 @@ export const MenuItem = styled.a`
   color: #003049;
 
   &:hover {
-    background: ${theme.colors.rose300};
+    background: ${theme.colors.rose400};
     color: #396177;
   }
 
   @media screen and (max-width: 700px) {
     h3 {
-      display: none;
+      //display: none;
 
     }
 
