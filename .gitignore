@@ -42,4 +42,4 @@ firestore.rules
 .firebaserc
 firestore.indexes.json
 firebase.json
-firebaseConfig.ts
+#firebaseConfig.ts
