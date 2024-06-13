@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User } from 'firebase/auth';
-import { auth } from '@/config/firebaseConfig'; 
+import { auth } from '../config/firebaseConfig'; 
 interface UserContextProps {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;

@@ -1,5 +1,5 @@
 import { getFirestore, deleteDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
-import { auth } from '@/config/firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 
 export const deleteUserAndEvents = async (userId: string) => {
   const db = getFirestore();

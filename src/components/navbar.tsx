@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Bell, BoxArrowInLeft, Gear, Palette, BellFill } from 'react-bootstrap-icons';
 import { Icon, MenuItem, NotificationsPopup, Sidebar, ThemeIndicator } from '../assets/styles/navbar';
-import { auth } from '@/config/firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 import { deleteUserAndEvents } from '../config/deleteUser';
 import NotificationToast from './notification';
 
