@@ -1,21 +1,19 @@
-"use client"
+'use client';
+
 import React, { useState } from 'react';
 import MyCalendar from '@/components/calendario';
 import Navbar from '@/components/navbar';
 import ProfilePage from '../profile/page';
-import { Container, Main, Menu, StyledGridContainer } from './styles'
-import { User } from 'firebase/auth';
-import {QueryClient,  QueryClientProvider } from 'react-query';
+import { Container, Main, Menu, StyledGridContainer } from './styles';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { useUser } from '@/context/UserContext';
 
 const queryClient = new QueryClient();
-interface AgendaProps {
-  user: User;
-}
 
-export default function Agenda({ user }: AgendaProps) {
+const Agenda: React.FC = () => {
+  const { user } = useUser(); 
   const [color, setColor] = useState<'rose' | 'green' | 'purple'>('rose');
   const [events, setEvents] = useState([]);
-
   const [notifications, setNotifications] = useState<any[]>([]);
 
   const handleColorChange = (newColor: 'rose' | 'green' | 'purple') => {
@@ -32,20 +30,16 @@ export default function Agenda({ user }: AgendaProps) {
         <Menu>
           <ProfilePage />
           <Navbar handleColorChange={handleColorChange} notifications={notifications} />
-
         </Menu>
-
         <Main>
-   
-        <QueryClientProvider client={queryClient}>
-        <MyCalendar handleEventNotification={handleEventNotification} />
-        </QueryClientProvider>
-        
-      </Main> 
-        
+          <QueryClientProvider client={queryClient}>
+            <MyCalendar handleEventNotification={handleEventNotification} />
+          </QueryClientProvider>
+        </Main>
       </StyledGridContainer>
-      </Container>
+    </Container>
   );
-}
+};
 
+export default Agenda;
 
