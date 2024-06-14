@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import MyCalendar from '@/components/calendario';
 import Navbar from '@/components/navbar';
 import ProfilePage from '../profile/page';
-import { Container, Main, Menu, StyledGridContainer } from './styles';
+import { Container, Logo, Main, Menu, StyledGridContainer } from './styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useUser } from '@/context/UserContext';
 import MenuHamburger from '@/components/button';
+import { Text } from '../styles';
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,8 @@ const Agenda: React.FC = () => {
 
   return (
     <Container color={color}>
+       <MenuHamburger handleColorChange={handleColorChange} notifications={notifications} themeColor={color} />
+      <Logo>PlannerA</Logo>
       <StyledGridContainer>
         <Menu>
           <ProfilePage />
@@ -38,7 +41,7 @@ const Agenda: React.FC = () => {
           </QueryClientProvider>
         </Main>
       </StyledGridContainer>
-      <MenuHamburger handleColorChange={handleColorChange} notifications={notifications} themeColor={color} />
+     
     </Container>
   );
 };

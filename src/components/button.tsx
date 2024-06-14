@@ -42,7 +42,7 @@ const MenuHamburger: React.FC<MenuHamburgerProps> = ({ handleColorChange, notifi
 export default MenuHamburger;
 
 const MenuContainer = styled.div<{ color: string }>`
-  position: fixed;
+ position: fixed; 
   top: 0;
   left: 0;
   width: 100vw;
