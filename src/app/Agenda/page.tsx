@@ -38,10 +38,9 @@ const Agenda: React.FC = () => {
           </QueryClientProvider>
         </Main>
       </StyledGridContainer>
-      <MenuHamburger/>
+      <MenuHamburger handleColorChange={handleColorChange} notifications={notifications} themeColor={color} />
     </Container>
   );
 };
 
 export default Agenda;
-

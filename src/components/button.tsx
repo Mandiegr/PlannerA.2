@@ -1,10 +1,21 @@
-import Link from 'next/link';
 import React, { useState } from 'react';
 import { Justify } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import Navbar from './navbar';
 
-const MenuHamburger = () => {
+interface MenuHamburgerProps {
+  handleColorChange: (color: 'rose' | 'green' | 'purple') => void;
+  notifications: any[];
+  themeColor: 'rose' | 'green' | 'purple';
+}
+
+const themeColors = {
+  rose: '#F2C8C8',
+  green: '#b0c4b1',
+  purple: '#cdb4db',
+};
+
+const MenuHamburger: React.FC<MenuHamburgerProps> = ({ handleColorChange, notifications, themeColor }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -13,19 +24,14 @@ const MenuHamburger = () => {
 
   return (
     <>
-      <Button onClick={toggleMenu}>
+      <Button onClick={toggleMenu} color={themeColors[themeColor]}>
         <Justify size={25} color="#1b263b" />
       </Button>
 
       {isOpen && (
-        <MenuContainer>
+        <MenuContainer color={themeColors[themeColor]}>
           <MenuSection>
-            <Navbar
-              handleColorChange={(color: 'rose' | 'green' | 'purple') => {
-                throw new Error('Function not implemented.');
-              }}
-              notifications={[]}
-            />
+            <Navbar handleColorChange={handleColorChange} notifications={notifications} />
           </MenuSection>
         </MenuContainer>
       )}
@@ -35,39 +41,23 @@ const MenuHamburger = () => {
 
 export default MenuHamburger;
 
-const MenuContainer = styled.div`
+const MenuContainer = styled.div<{ color: string }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #f2c8c8;
+  background-color: ${({ color }) => color};
   display: flex;
   flex-direction: column;
   z-index: 1000;
 `;
 
-const MenuItem = styled.div`
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1.5rem;
-  margin: 10px 0;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  @media (max-width: 491px) {
-    font-size: 1rem;
-  }
-`;
-
-const Button = styled.button`
+const Button = styled.button<{ color: string }>`
   position: fixed;
   top: 10px;
   left: 10px; 
-  background: #f2c8c8;
+  background: ${({ color }) => color};
   border: none;
   z-index: 1100;
   display: none;
