@@ -1,3 +1,4 @@
+import { theme } from "@/assets/themes/theme";
 import styled from "styled-components";
 
 const ColorSwitcher = styled.div`
@@ -38,8 +39,9 @@ export const Container = styled.div<ContainerProps>`
 `;
 
 export const Logo = styled.div`
-  display: none;
-
+   display: none;
+   color: ${theme.colors.green800};
+  font-size: 2.5rem;
   @media screen and (max-width: 700px) {
     display: block;
   }

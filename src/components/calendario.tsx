@@ -54,8 +54,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     return eventosProximos;
   });
   
-  
-
   const handleDateSelect = (arg: DateSelectArg) => {
     setFormData({
       title: '',
@@ -65,8 +63,22 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     setShowForm(true);
   };
 
+  const handleDateClick = (arg: { dateStr: any; }) => {
+    setFormData({
+      title: '',
+      start: arg.dateStr,
+      end: arg.dateStr,
+    });
+    setShowForm(true);
+  }
+
   const handleEventClick = (info: EventClickArg) => {
     setSelectedEvent(info.event.toPlainObject());
+    setFormData({
+      title: info.event.title,
+      start: info.event.startStr,
+      end: info.event.endStr || info.event.startStr,
+    });
     setShowEditForm(true);
   };
 
@@ -76,7 +88,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     }
   };
   
-
   const handleSubmit = async () => {
     const { title, start, end } = formData;
     if (title && start && end) {
@@ -116,7 +127,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
         start: new Date(start).toISOString(), 
         end: new Date(end).toISOString(),
         ownerId: userId,
-         edited: true,
+        edited: true,
       };
       try {
         await updateDoc(doc(db, 'eventos', selectedEvent.id), updatedEvent);
@@ -127,7 +138,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
           return updatedEvents;
         });
         setShowEditForm(false);
-        //handleEventNotification(updatedEvent);
+       // handleEventNotification(updatedEvent);
       } catch (error) {
         console.error('Erro ao atualizar evento:', error);
         alert('Erro ao atualizar evento. Tente novamente.');
@@ -161,8 +172,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       console.error('ID do evento não está disponível');
     }
   };
-  
-  
 
   return (
     <CallendarContainer>
@@ -179,6 +188,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
         height="500px"
         selectable={true}
         select={handleDateSelect}
+        dateClick={handleDateClick}
         eventClick={handleEventClick}
         events={events}
         eventChange={(arg: EventChangeArg) => handleEventUpdate(arg.event)}
@@ -226,7 +236,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
             <Button onClick={handleDelete}>Excluir Evento</Button>
             <Button onClick={handleEditSubmit}>Editar Evento</Button>
           </div>
-        
         </Model>
       )}
     </CallendarContainer>
