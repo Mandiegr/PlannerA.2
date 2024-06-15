@@ -59,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
   return (
     <Sidebar>
       <MenuItem className="menu-item" onClick={handleThemeClick}>
-        <Icon><Palette /></Icon><h3>Theme</h3>
+        <Icon><Palette /></Icon><h3>Tema</h3>
       </MenuItem>
       {showTheme && (
         <>
@@ -81,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
         <div>
           {notifications && notifications.length > 0 ? <Icon><BellFill /></Icon> : <Icon><Bell /></Icon>} 
         </div>
-        <h3>Notifications</h3>
+        <h3>Notificações</h3>
         <NotificationsPopup show={showNotifications}>
           {notifications && notifications.map(notification => (
             notification && (
@@ -103,12 +103,12 @@ const Navbar: React.FC<NavbarProps> = ({ handleColorChange, notifications }) => 
         </NotificationsPopup>
       </MenuItem>
       <MenuItem className="menu-item" onClick={handleConfigurationClick}>
-        <Icon><Gear /></Icon><h3>Configuration</h3>
+        <Icon><Gear /></Icon><h3>Configuração</h3>
       </MenuItem>
       {showConfiguration && (
         <>
           <MenuItem className="menu-item" onClick={handleDeleteAccount}>
-            <Icon><BoxArrowInLeft /></Icon><h3>Excluir Conta</h3>
+            <Icon><BoxArrowInLeft /></Icon><h3>Sair da conta</h3>
           </MenuItem>
         </>
       )}

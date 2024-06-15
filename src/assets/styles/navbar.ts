@@ -33,7 +33,7 @@ export const MenuItem = styled.a`
   color: #003049;
 
   &:hover {
-    background: ${theme.colors.rose400};
+    background: transparent;
     color: #396177;
   }
 
