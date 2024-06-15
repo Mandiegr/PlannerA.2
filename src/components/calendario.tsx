@@ -7,9 +7,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { DateSelectArg, EventClickArg, EventApi, EventInput, EventChangeArg } from '@fullcalendar/core';
-import { Button, CallendarContainer, Model } from './styles-callendar';
+import { Button, CalendarContainer, Model, CloseButton } from './styles-callendar';
 import { useQuery } from 'react-query';
 import moment from 'moment';
+import { XCircle } from 'react-bootstrap-icons';
 
 interface MyCalendarProps {
   handleEventNotification: (eventNotification: any) => void;
@@ -53,7 +54,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     });
     return eventosProximos;
   });
-  
+
   const handleDateSelect = (arg: DateSelectArg) => {
     setFormData({
       title: '',
@@ -87,7 +88,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       handleEventNotification(updatedEvent.toPlainObject());
     }
   };
-  
+
   const handleSubmit = async () => {
     const { title, start, end } = formData;
     if (title && start && end) {
@@ -95,17 +96,17 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       const newEvent = {
         title,
         start: new Date(start).toISOString(),
-        end: new Date(end).toISOString(), 
+        end: new Date(end).toISOString(),
         allDay: false,
         createdAt: serverTimestamp(),
         ownerId: userId,
-        edited: false, 
+        edited: false,
       };
       try {
         const eventosRef = collection(db, 'eventos');
         const docRef = await addDoc(eventosRef, newEvent);
-        const addedEvent = { ...newEvent, id: docRef.id }; 
-        setEvents(prevEvents => [...prevEvents, addedEvent]); 
+        const addedEvent = { ...newEvent, id: docRef.id };
+        setEvents(prevEvents => [...prevEvents, addedEvent]);
         setShowForm(false);
         handleEventNotification(addedEvent);
       } catch (error) {
@@ -116,7 +117,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       alert('Por favor, preencha todos os campos do formulário.');
     }
   };
-  
+
   const handleEditSubmit = async () => {
     const { title, start, end } = formData;
     if (title && start && end && selectedEvent && selectedEvent.id) {
@@ -124,7 +125,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       const updatedEvent = {
         ...selectedEvent,
         title,
-        start: new Date(start).toISOString(), 
+        start: new Date(start).toISOString(),
         end: new Date(end).toISOString(),
         ownerId: userId,
         edited: true,
@@ -138,7 +139,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
           return updatedEvents;
         });
         setShowEditForm(false);
-       // handleEventNotification(updatedEvent);
       } catch (error) {
         console.error('Erro ao atualizar evento:', error);
         alert('Erro ao atualizar evento. Tente novamente.');
@@ -173,8 +173,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
     }
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setShowEditForm(false);
+  };
+
   return (
-    <CallendarContainer>
+    <CalendarContainer>
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -195,6 +200,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       />
       {showForm && (
         <Model>
+          <CloseButton onClick={handleCloseForm}>×</CloseButton>
           <input
             type="text"
             placeholder="Digite o título do evento"
@@ -216,6 +222,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
       )}
       {showEditForm && (
         <Model>
+          <CloseButton onClick={handleCloseForm}>×</CloseButton>
           <input
             type="text"
             placeholder="Digite o título do evento"
@@ -232,13 +239,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ handleEventNotification }) => {
             value={formData.end}
             onChange={e => setFormData({ ...formData, end: e.target.value })}
           />
-          <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <Button onClick={handleDelete}>Excluir Evento</Button>
             <Button onClick={handleEditSubmit}>Editar Evento</Button>
           </div>
         </Model>
       )}
-    </CallendarContainer>
+    </CalendarContainer>
   );
 };
 
