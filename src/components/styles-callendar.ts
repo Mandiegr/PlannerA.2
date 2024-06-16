@@ -10,7 +10,9 @@ export const CalendarContainer = styled.div`
 export const ModelContainer = styled.div`
  display: flex;
  align-items: center;
-  justify-content: center;
+ justify-content: center;
+ position: relative;
+ 
 `
 
 export const Model = styled.div`
