@@ -7,6 +7,12 @@ export const CalendarContainer = styled.div`
   }
 `;
 
+export const ModelContainer = styled.div`
+ display: flex;
+ align-items: center;
+  justify-content: center;
+`
+
 export const Model = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,6 +39,12 @@ export const Model = styled.div`
   }
 `;
 
+export const ButtonContainer = styled.div`
+ display: flex;
+ justify-content: space-between;
+ width: 100%;
+`
+
 export const Button = styled.button`
   background-color: ${theme.colors.rose100};
   color: ${theme.colors.green800};
@@ -42,7 +54,7 @@ export const Button = styled.button`
   border-radius: 4px;
   text-align: center;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: background-color 0.3s;
 
